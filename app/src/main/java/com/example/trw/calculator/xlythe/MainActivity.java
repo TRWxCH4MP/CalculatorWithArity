@@ -19,7 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    int a;
     Symbols symbols = new Symbols();
     TextView txtView;
     EditText edtText;
@@ -183,27 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnEnter:
                 getResult();
-
-                /*String text = edtText.getText().toString();
-                Pattern pattern = Pattern.compile("\\d+(\\,\\d{1,100})?(\\.\\d{1,100})?|\\+|-|\\*|/");
-                Matcher m = pattern.matcher("1+2-3*0.4/5");
-
-                //Toast.makeText(this, "= " + m.find(), Toast.LENGTH_SHORT).show();
-                int groupCount = m.groupCount();
-                int myMatches = 0;
-
-                while (m.find()) {
-                    myMatches++;
-
-                    for (int index = 0; index <= groupCount; index++) {
-                        // Group index substring
-                        if (index == 0) {
-                            if (m.group(index).matches("\\+|-|\\*|/")) {
-                                Toast.makeText(this, "= " + m.group(index), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }*/
                 break;
         }
     }
@@ -313,27 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void afterTextChanged(Editable s) {
                 edtText.removeTextChangedListener(this);
-
-                /*try {
-                    String givenstring = s.toString();
-                    Long longval;
-                    if (givenstring.contains(",")) {
-                        givenstring = givenstring.replaceAll(",", "");
-                    }
-                    longval = Long.parseLong(givenstring);
-                    DecimalFormat formatter = new DecimalFormat("#,###,###");
-                    String formattedString = formatter.format(longval);
-
-
-                    edtText.setText(formattedString);
-                    setSelection();
-                    // to place the cursor at the end of text
-                } catch (NumberFormatException nfe) {
-                    nfe.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
+                
                 String input = s.toString();
                 if (input.contains(",")) {
                     input = input.replaceAll(",", "");

@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    int a;
     Symbols symbols = new Symbols();
     TextView txtView;
     EditText edtText;

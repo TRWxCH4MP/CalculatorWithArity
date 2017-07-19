@@ -102,67 +102,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 num0 = 0;
                 edtText.append(num0+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn1:
                 num1 = 1;
                 edtText.append(num1+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn2:
                 num2 = 2;
                 edtText.append(num2+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn3:
                 num3 = 3;
                 edtText.append(num3+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn4:
                 num4 = 4;
                 edtText.append(num4+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn5:
                 num5 = 5;
                 edtText.append(num5+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn6:
                 num6 = 6;
                 edtText.append(num6+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn7:
                 num7 = 7;
                 edtText.append(num7+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn8:
                 num8 = 8;
                 edtText.append(num8+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btn9:
                 num9 = 9;
                 edtText.append(num9+"");
                 getResult();
-                setSelection();
                 break;
             case R.id.btnPlus:
                 CURRENT_ACTION = PLUS;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
-                setSelection();
                 break;
             case R.id.btnMinus:
                 CURRENT_ACTION = MINUS;
@@ -173,24 +162,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     changeOperator(CURRENT_ACTION);
                     checkOperator(CURRENT_ACTION);
                 }
-                setSelection();
                 break;
             case R.id.btnMultiply:
                 CURRENT_ACTION = MULTIPLY;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
-                setSelection();
                 break;
             case R.id.btnDivide:
                 CURRENT_ACTION = DIVIDE;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
-                setSelection();
                 break;
             case R.id.btnDot:
                 CURRENT_ACTION = DOT;
                 dotOperator(CURRENT_ACTION);
-                setSelection();
                 break;
             case R.id.btnDelete:
                 deleteText();
@@ -199,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnEnter:
                 getResult();
 
-                String text = edtText.getText().toString();
+                /*String text = edtText.getText().toString();
                 Pattern pattern = Pattern.compile("\\d+(\\,\\d{1,100})?(\\.\\d{1,100})?|\\+|-|\\*|/");
                 Matcher m = pattern.matcher("1+2-3*0.4/5");
 
@@ -218,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     }
-                }
+                }*/
                 break;
         }
     }
@@ -233,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ls.get(ls.size()-1).equals("-") ||
                 ls.get(ls.size()-1).equals("*") ||
                 ls.get(ls.size()-1).equals("/") ) {
-                edtText.setText(edtText.getText().toString() + "0"+action);
+            edtText.setText(edtText.getText().toString() + "0"+action);
 
         }
         else {
@@ -355,7 +340,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 edtText.setText(formatText(input));
                 setSelection();
-
                 edtText.addTextChangedListener(this);
             }
         };
@@ -364,8 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String formatText(String input) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         String text = "";
-
-        Pattern pattern = Pattern.compile("\\d+(\\.\\d{1,100})?|\\+|-|\\*|/");
+        Pattern pattern = Pattern.compile("\\d+(\\.\\d{1,100})?|\\+|-|\\*|/|\\.?");
         Matcher m = pattern.matcher(input);
         //Toast.makeText(this, originalString + " = " + m.find(), Toast.LENGTH_SHORT).show();
         int groupCount = m.groupCount();
@@ -381,29 +364,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         text += formatter.format(numberFormat);
                         //Toast.makeText(MainActivity.this, " = "+ text, Toast.LENGTH_SHORT).show();
                     }
-                    else if (m.group(index).matches("\\+|-|\\*|/|.?")){
-
-                        /*ArrayList<String> operations = new ArrayList<>(Arrays
-                                .asList(input.split("\\d+(\\.\\d{1,100})?")));
-                        int size = operations.size();
-                        int size2 = size-1;*/
-
-
-                        if( CURRENT_ACTION == PLUS) {
-                            String s = "+";
-                            text += s;
-                        } else if ( CURRENT_ACTION == MINUS) {
-                            String s = "-";
-                            text += s;
-                        } else if ( CURRENT_ACTION == MULTIPLY) {
-                            String s = "*";
-                            text += s;
-                        } else if ( CURRENT_ACTION == DIVIDE) {
-                            String s = "/";
-                            text += s;
-                        }
-
+                    else if (m.group(index).matches("\\+|-|\\*|/")){
+                        text += m.group(index);
                         //Toast.makeText(this, "Operations ! " + text, Toast.LENGTH_SHORT).show();
+                    } else if (m.group(index).matches("\\.?")) {
+                        text += m.group(index);
                     }
                     //Toast.makeText(this, "Group " + i + ": " + m.group(i), Toast.LENGTH_SHORT).show();
                 }

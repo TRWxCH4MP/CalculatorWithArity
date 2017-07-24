@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     String input;
-    Symbols symbols = new Symbols();
     TextView txtView;
     EditText edtText;
     Button btn0, btn1, btn2, btn3, btn4,
@@ -29,10 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnDivide, btnDelete, btnDot, btnEnter;
 
 
-    private char CURRENT_ACTION;
 
-    DecimalFormat formatterResult = new DecimalFormat("#,###.00");
-    DecimalFormat formatterResult2 = new DecimalFormat("#,###");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,167 +124,123 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 formatText(input);
                 break;
             case R.id.btnPlus:
-                CURRENT_ACTION = NumberCalculateHelper.PLUS;
-                changeOperator(CURRENT_ACTION);
-                checkOperator(CURRENT_ACTION);
+                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.PLUS;
+                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
+                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnMinus:
-                CURRENT_ACTION = NumberCalculateHelper.MINUS;
+                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.MINUS;
                 if (edtText.getText().toString().length() <= 0) {
-                    edtText.setText(edtText.getText().toString() + CURRENT_ACTION);
-                }
-                else {
-                    changeOperator(CURRENT_ACTION);
-                    checkOperator(CURRENT_ACTION);
+                    edtText.setText(edtText.getText().toString() + NumberCalculateHelper.CURRENT_ACTION);
+                } else {
+                    onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
+                    onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
                 }
                 setSelection();
                 break;
             case R.id.btnMultiply:
-                CURRENT_ACTION = NumberCalculateHelper.MULTIPLY;
-                changeOperator(CURRENT_ACTION);
-                checkOperator(CURRENT_ACTION);
+                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.MULTIPLY;
+                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
+                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDivide:
-                CURRENT_ACTION = NumberCalculateHelper.DIVIDE;
-                changeOperator(CURRENT_ACTION);
-                checkOperator(CURRENT_ACTION);
+                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.DIVIDE;
+                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
+                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDot:
-                CURRENT_ACTION = NumberCalculateHelper.DOT;
-                dotOperator(CURRENT_ACTION);
+                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.DOT;
+                dotOperator(NumberCalculateHelper.CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDelete:
-                onTextDelete();
-                getResult();
+                onTextDeleted();
                 break;
             case R.id.btnEnter:
-                getResult();
+                String result = NumberCalculateHelper.getResult(edtText.getText().toString());
+                showResult(result);
 
                 String text = "1500+0.5+1000000";
-                String result = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
-                Toast.makeText(this, "= "+ result, Toast.LENGTH_SHORT).show();
+                String resultTest = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
+                Toast.makeText(this, "= "+ resultTest, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
-    private void dotOperator(char operator) {
-        char action = operator;
-        ArrayList<String> ls = new ArrayList<>(Arrays.asList(edtText.getText().toString().split("")));
-        if (edtText.getText().toString().length() <= 0) {
-            edtText.setText(edtText.getText().toString() + "0"+action);
+    private void formatText(String input) {
+        String text = edtText.getText().toString() + input;
+        if (text.contains(",")) {
+            text = text.replaceAll(",", "");
         }
-        else if (ls.get(ls.size()-1).equals("+") ||
-                ls.get(ls.size()-1).equals("-") ||
-                ls.get(ls.size()-1).equals("*") ||
-                ls.get(ls.size()-1).equals("/") ) {
-            edtText.setText(edtText.getText().toString() + "0"+action);
-
-        }
-        else {
-            checkOperator(action);
-        }
-    }
-
-    private void changeOperator(char operator) {
-        char action = operator;
-        String str = edtText.getText().toString();
-        ArrayList<String> split1 = new ArrayList<>(Arrays.asList(str.split("")));
-        int size = 0;
-        int index = 0;
-        size = split1.size();
-        index = size-1 ;
-        if (split1.get(index).equals("+") ||
-                split1.get(index).equals("-") ||
-                split1.get(index).equals("*") ||
-                split1.get(index).equals("/")) {
-            if (str.length() != 1) {
-                onTextDelete();
-                edtText.setText(edtText.getText().toString() + action);
-            }
-        }
-    }
-
-    private void checkOperator(char operator) {
-        char action = operator;
-        String string1 = edtText.getText().toString();
-        int sizeSplit = 0;
-        int index = 0;
-        int index2 = 0;
-        ArrayList<String> split1 = new ArrayList<>(Arrays.asList(string1.split("")));
-
-        try {
-            sizeSplit = split1.size();
-            index = sizeSplit-1;
-            index2 = Integer.parseInt(split1.get(index));
-
-            if (index2 >= 0) {
-                edtText.setText(edtText.getText().toString() + action);
-            }
-            else {
-                Toast.makeText(this, "cannot input !", Toast.LENGTH_SHORT).show();
-            }
-        } catch (NumberFormatException ex) {}
-    }
-
-    private void getResult(){
-        double decimal = 0;
-        String str = edtText.getText().toString().replaceAll(",", "");
-        if (str.length() == 0) {
-            txtView.setText("0");
-        }
-        else {
-            try {
-                decimal = symbols.eval(str);
-            } catch (SyntaxException e) {
-                Toast.makeText(this, "cannot calculate !", Toast.LENGTH_SHORT).show();
-            }
-            if ( decimal % 1 != 0) {
-                String result = formatterResult.format(decimal);
-                txtView.setText(result);
-            }
-            else {
-                String result = formatterResult2.format(decimal);
-                txtView.setText(result);
-            }
-        }
-    }
-
-    private void onTextDelete(){
-        String value = edtText.getText().toString();
-        String result = NumberCalculateHelper.deleteText(value);
-        if (result != null) {
-            edtText.setText(result);
-        }
-        else {
-            edtText.setText(null);
-        }
+        text = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
+        edtText.setText(text);
+        String result = NumberCalculateHelper.getResult(text);
+        showResult(result);
         setSelection();
     }
 
+    private void dotOperator(String operator) {
+        ArrayList<String> ls = new ArrayList<>(Arrays.asList(edtText.getText().toString().split("")));
+        if (edtText.getText().toString().length() <= 0) {
+            edtText.setText(edtText.getText().toString() + "0" + operator);
+        } else if (ls.get(ls.size() - 1).equals("+") ||
+                ls.get(ls.size() - 1).equals("-") ||
+                ls.get(ls.size() - 1).equals("*") ||
+                ls.get(ls.size() - 1).equals("/")) {
+            edtText.setText(edtText.getText().toString() + "0" + operator);
+
+        } else {
+            onNumberValueChanged(operator);
+        }
+    }
+
+    private void onOperatorChanged(String operator) {
+        String value = edtText.getText().toString();
+        String result = NumberCalculateHelper.changeOperator(value, operator);
+        if(result != null) {
+            edtText.setText(result);
+        }
+    }
+
+    private void onNumberValueChanged(String operator) {
+        String value = edtText.getText().toString();
+        String result = NumberCalculateHelper.checkNumberInsert(value, operator);
+        if(result != null) {
+            edtText.setText(result);
+        } else {
+            Toast.makeText(this, "cannot input !", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void showResult(String result) {
+        if (result != null) {
+            txtView.setText(result);
+        }
+        else if (result == null) {
+            Toast.makeText(this, "Cannot Calculate !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void onTextDeleted() {
+        String value = edtText.getText().toString();
+        String result = NumberCalculateHelper.deleteText(value);
+        if(result != null) {
+            edtText.setText(result);
+            String showResult = NumberCalculateHelper.getResult(result);
+            showResult(showResult);
+            setSelection();
+        }
+        else if (result == null) {
+            txtView.setText("0");
+        }
+    }
 
 
     public void setSelection() {
         edtText.setSelection(edtText.getText().length());
     }
-
-    private String formatText(String input) {
-        edtText.append(input);
-        String text = edtText.getText().toString();
-        if (text.contains(",")) {
-            text = text.replaceAll(",", "");
-        }
-        String afterText = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
-        edtText.setText(afterText);
-        getResult();
-        setSelection();
-        return null;
-    }
-
-
 
 
 

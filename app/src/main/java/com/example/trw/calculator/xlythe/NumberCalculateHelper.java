@@ -1,7 +1,12 @@
 package com.example.trw.calculator.xlythe;
 
+import org.javia.arity.Symbols;
+import org.javia.arity.SyntaxException;
+
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -10,11 +15,18 @@ import java.util.regex.Pattern;
 
 public class NumberCalculateHelper {
 
-    public static final char PLUS = '+';
-    public static final char MINUS = '-';
-    public static final char MULTIPLY = '*';
-    public static final char DIVIDE = '/';
-    public static final char DOT = '.';
+    static Symbols symbols = new Symbols();
+
+    static DecimalFormat formatterResult = new DecimalFormat("#,###.00");
+    static DecimalFormat formatterResult2 = new DecimalFormat("#,###");
+
+    public static String CURRENT_ACTION;
+
+    public static final String PLUS = "+";
+    public static final String MINUS = "-";
+    public static final String MULTIPLY = "*";
+    public static final String DIVIDE = "/";
+    public static final String DOT = ".";
 
     public static DecimalFormatSymbols DECIMAL_FORMAT = new DecimalFormatSymbols();
     public static char DECIMAL_POINT = DECIMAL_FORMAT.getDecimalSeparator();
@@ -32,27 +44,74 @@ public class NumberCalculateHelper {
     public static final char SELECTION_HANDLE = '\u2620';
     private static final int mDecSeparatorDistance = 3;
 
+    public enum Base {
+        DECIMAL(10);
+
+        int quickSerializable;
+
+        Base(int num) {
+            this.quickSerializable = num;
+        }
+
+    }
     public static char getDecimalPoint() {
         return DECIMAL_POINT;
     }
 
-    public static String deleteText(String value) {
-        String textString = value;
-        String originalString;
-        String afterText;
-        if (textString.length() > 0) {
-            originalString = textString.substring(0, textString.length() - 1);
-
-            if (originalString.contains(",")) {
-                originalString = originalString.replaceAll(",", "");
-                afterText = groupSentence(originalString, SELECTION_HANDLE);
-                return afterText;
-            } else {
-                return originalString;
+    public static String changeOperator(String value, String operator) {
+        ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
+        int size;
+        int index;
+        size = split1.size();
+        index = size - 1;
+        if (split1.get(index).equals("+") ||
+                split1.get(index).equals("-") ||
+                split1.get(index).equals("*") ||
+                split1.get(index).equals("/")) {
+            if (value.length() != 1) {
+                value = deleteText(value);
+                return String.format("%s%s", value, operator);
             }
         }
-        else if (textString.length() == 0) {
-            return null;
+        return null;
+    }
+
+    public static String checkNumberInsert(String value, String operator) {
+        int sizeSplit;
+        int index;
+        int index2;
+        ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
+        try {
+            sizeSplit = split1.size();
+            index = sizeSplit - 1;
+            index2 = Integer.parseInt(split1.get(index));
+
+            if (index2 >= 0) {
+                return String.format("%s%s", value, operator);
+            }
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
+    }
+
+    public static String deleteText(String value) {
+        String originalString;
+        String formatText;
+        try {
+            if (value.length() > 0) {
+                originalString = value.substring(0, value.length() - 1);
+
+                if (originalString.contains(",")) {
+                    originalString = originalString.replaceAll(",", "");
+                    formatText = groupSentence(originalString, NumberCalculateHelper.SELECTION_HANDLE);
+                    return formatText;
+                } else {
+                    return originalString;
+                }
+            } else if (value.length() == 0) {
+                return null;
+            }
+        } catch (NullPointerException ignored) {
         }
         return null;
     }
@@ -171,15 +230,25 @@ public class NumberCalculateHelper {
         return number.startsWith(String.valueOf(MINUS)) || number.startsWith("-");
     }
 
-    public enum Base {
-        DECIMAL(10);
-
-        int quickSerializable;
-
-        Base(int num) {
-            this.quickSerializable = num;
+    public static String getResult(String value) {
+        double decimal = 0;
+        String str = value.replaceAll(",", "");
+        if (str.length() == 0) {
+            return null;
+        } else {
+            try {
+                decimal = symbols.eval(str);
+            } catch (SyntaxException ex) {
+                return null;
+            }
+            if (decimal % 1 != 0) {
+                String result = formatterResult.format(decimal);
+                return result;
+            } else {
+                String result = formatterResult2.format(decimal);
+                return result;
+            }
         }
-
     }
 
 }

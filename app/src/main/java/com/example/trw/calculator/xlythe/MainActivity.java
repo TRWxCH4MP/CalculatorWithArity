@@ -2,8 +2,6 @@ package com.example.trw.calculator.xlythe;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +11,32 @@ import com.example.trw.calculator.R;
 import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private DecimalFormatSymbols DECIMAL_FORMAT;
+    public char DECIMAL_POINT;
+    public char DECIMAL_SEPARATOR;
+
+    private String REGEX_NUMBER;
+    private String REGEX_NOT_NUMBER;
+
+
+    private Base mBase = Base.DECIMAL;
+
+    public final char SELECTION_HANDLE = '\u2620';
+    private final int mDecSeparatorDistance = 3;
+
+    public char getDecimalPoint() {
+        return DECIMAL_POINT;
+    }
+
+    String input;
     Symbols symbols = new Symbols();
     TextView txtView;
     EditText edtText;
@@ -27,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnPlus, btnMinus, btnMultiply,
             btnDivide, btnDelete, btnDot, btnEnter;
 
-    int num0, num1, num2, num3, num4,
-            num5, num6, num7, num8, num9;
 
     private static final char PLUS = '+';
     private static final char MINUS = '-';
@@ -37,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final char DOT = '.';
 
     private char CURRENT_ACTION;
-    private final String REGEX_NUMBER = "\\d";
-    private final String REGEX_NOT_NUMBER = "\\+|-|\\*|/";
 
     DecimalFormat formatterResult = new DecimalFormat("#,###.00");
     DecimalFormat formatterResult2 = new DecimalFormat("#,###");
@@ -48,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initInstance();
+        rebuildConstants();
+
+
     }
     public void initInstance() {
 
@@ -89,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnDelete.setOnClickListener(this);
         btnEnter.setOnClickListener(this);
 
-
-        edtText.addTextChangedListener(onTextChangedListener());
         txtView.setText("0");
     }
 
@@ -98,59 +113,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn0:
-                num0 = 0;
-                edtText.append(num0+"");
-                getResult();
+                input = "0";
+                formatText(input);
                 break;
             case R.id.btn1:
-                num1 = 1;
-                edtText.append(num1+"");
-                getResult();
+                input = "1";
+                formatText(input);
                 break;
             case R.id.btn2:
-                num2 = 2;
-                edtText.append(num2+"");
-                getResult();
+                input = "2";
+                formatText(input);
                 break;
             case R.id.btn3:
-                num3 = 3;
-                edtText.append(num3+"");
-                getResult();
+                input = "3";
+                formatText(input);
                 break;
             case R.id.btn4:
-                num4 = 4;
-                edtText.append(num4+"");
-                getResult();
+                input = "4";
+                formatText(input);
                 break;
             case R.id.btn5:
-                num5 = 5;
-                edtText.append(num5+"");
-                getResult();
+                input = "5";
+                formatText(input);
                 break;
             case R.id.btn6:
-                num6 = 6;
-                edtText.append(num6+"");
-                getResult();
+                input = "6";
+                formatText(input);
                 break;
             case R.id.btn7:
-                num7 = 7;
-                edtText.append(num7+"");
-                getResult();
+                input = "7";
+                formatText(input);
                 break;
             case R.id.btn8:
-                num8 = 8;
-                edtText.append(num8+"");
-                getResult();
+                input = "8";
+                formatText(input);
                 break;
             case R.id.btn9:
-                num9 = 9;
-                edtText.append(num9+"");
-                getResult();
+                input = "9";
+                formatText(input);
                 break;
             case R.id.btnPlus:
                 CURRENT_ACTION = PLUS;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
+                setSelection();
                 break;
             case R.id.btnMinus:
                 CURRENT_ACTION = MINUS;
@@ -161,20 +167,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     changeOperator(CURRENT_ACTION);
                     checkOperator(CURRENT_ACTION);
                 }
+                setSelection();
                 break;
             case R.id.btnMultiply:
                 CURRENT_ACTION = MULTIPLY;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
+                setSelection();
                 break;
             case R.id.btnDivide:
                 CURRENT_ACTION = DIVIDE;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
+                setSelection();
                 break;
             case R.id.btnDot:
                 CURRENT_ACTION = DOT;
                 dotOperator(CURRENT_ACTION);
+                setSelection();
                 break;
             case R.id.btnDelete:
                 deleteText();
@@ -182,6 +192,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnEnter:
                 getResult();
+
+                /*String text = "1500+0.5+1000000";
+                String result = groupSentence(text, SELECTION_HANDLE);
+                Toast.makeText(this, "= "+ result, Toast.LENGTH_SHORT).show();*/
                 break;
         }
     }
@@ -255,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 decimal = symbols.eval(str);
             } catch (SyntaxException e) {
-                e.printStackTrace();
+                Toast.makeText(this, "cannot calculate !", Toast.LENGTH_SHORT).show();
             }
             if ( decimal % 1 != 0) {
                 String result = formatterResult.format(decimal);
@@ -270,74 +284,179 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void deleteText() {
         String textString = edtText.getText().toString();
+        String originalString;
+        String afterText;
         if (textString.length() > 0) {
-            edtText.setText(textString.substring(0, textString.length() - 1));
-            setSelection();
+            originalString = textString.substring(0, textString.length() - 1);
+
+            if (originalString.contains(",")) {
+                originalString = originalString.replaceAll(",", "");
+                afterText = groupSentence(originalString, SELECTION_HANDLE);
+                edtText.setText(afterText);
+            } else {
+                edtText.setText(originalString);
+            }
         }
         else if (textString.length() == 0) {
             txtView.setText("0");
         }
-    }
-
-    private TextWatcher onTextChangedListener() {
-        return new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                edtText.removeTextChangedListener(this);
-                
-                String input = s.toString();
-                if (input.contains(",")) {
-                    input = input.replaceAll(",", "");
-                }
-                edtText.setText(formatText(input));
-                setSelection();
-                edtText.addTextChangedListener(this);
-            }
-        };
-    }
-
-    private String formatText(String input) {
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
-        String text = "";
-        Pattern pattern = Pattern.compile("\\d+(\\.\\d{1,100})?|\\+|-|\\*|/|\\.?");
-        Matcher m = pattern.matcher(input);
-        //Toast.makeText(this, originalString + " = " + m.find(), Toast.LENGTH_SHORT).show();
-        int groupCount = m.groupCount();
-        int myMatches = 0;
-
-        while (m.find()) {
-            myMatches++;
-            for (int index = 0; index <= groupCount; index++) {
-                // Group index substring
-                if (index == 0) {
-                    if (m.group(index).matches("\\d+(\\.\\d{1,100})?")) {
-                        Double numberFormat = Double.parseDouble(m.group(index));
-                        text += formatter.format(numberFormat);
-                        //Toast.makeText(MainActivity.this, " = "+ text, Toast.LENGTH_SHORT).show();
-                    }
-                    else if (m.group(index).matches("\\+|-|\\*|/")){
-                        text += m.group(index);
-                        //Toast.makeText(this, "Operations ! " + text, Toast.LENGTH_SHORT).show();
-                    } else if (m.group(index).matches("\\.?")) {
-                        text += m.group(index);
-                    }
-                    //Toast.makeText(this, "Group " + i + ": " + m.group(i), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-        return text;
+        setSelection();
     }
 
     public void setSelection() {
         edtText.setSelection(edtText.getText().length());
     }
 
+    private String formatText(String input) {
+        edtText.append(input);
+        String text = edtText.getText().toString();
+        if (text.contains(",")) {
+            text = text.replaceAll(",", "");
+        }
+        String afterText = groupSentence(text, SELECTION_HANDLE);
+        edtText.setText(afterText);
+        getResult();
+        setSelection();
+        return null;
+    }
+
+    private Object[] removeWhitespace(String[] strings) {
+        ArrayList<String> formatted = new ArrayList<String>(strings.length);
+        for(String s : strings) {
+            if(s != null && !s.isEmpty()) formatted.add(s);
+        }
+        return formatted.toArray();
+    }
+
+    public String groupSentence(String originalText, int selectionHandle) {
+        if(originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
+
+        String[] operations = originalText.split(REGEX_NUMBER);
+        String[] numbers = originalText.split(REGEX_NOT_NUMBER);
+        String[] translatedNumbers = new String[numbers.length];
+        for(int i = 0; i < numbers.length; i++) {
+            if(!numbers[i].isEmpty()) {
+                translatedNumbers[i] = groupDigits(numbers[i], mBase);
+            }
+        }
+        String text = "";
+        Object[] o = removeWhitespace(operations);
+        Object[] n = removeWhitespace(translatedNumbers);
+        if(originalText.substring(0, 1).matches(REGEX_NUMBER)) {
+            for(int i = 0; i < o.length && i < n.length; i++) {
+                text += n[i];
+                text += o[i];
+            }
+        } else {
+            for(int i = 0; i < o.length && i < n.length; i++) {
+                text += o[i];
+                text += n[i];
+            }
+        }
+        if(o.length > n.length) {
+            text += o[o.length - 1];
+        } else if(n.length > o.length) {
+            text += n[n.length - 1];
+        }
+
+        return text;
+    }
+
+    public String groupDigits(String number, Base base) {
+        String sign = "";
+        if(isNegative(number)) {
+            sign = String.valueOf(MINUS);
+            number = number.substring(1);
+        }
+        String wholeNumber = number;
+        String remainder = "";
+        // We only group the whole number
+        if(number.contains(getDecimalPoint()+"")) {
+            if(!number.startsWith(getDecimalPoint()+"")) {
+                String[] temp = number.split(Pattern.quote(getDecimalPoint()+""));
+                wholeNumber = temp[0];
+                remainder = getDecimalPoint() + ((temp.length == 1) ? "" : temp[1]);
+            } else {
+                wholeNumber = "";
+                remainder = number;
+            }
+        }
+
+        String modifiedNumber = group(wholeNumber, getSeparatorDistance(base), getSeparator(base));
+
+        return sign + modifiedNumber + remainder;
+    }
+
+    private String group(String wholeNumber, int spacing, char separator) {
+        StringBuilder sb = new StringBuilder();
+        int digitsSeen = 0;
+        for (int i=wholeNumber.length()-1; i>=0; --i) {
+            char curChar = wholeNumber.charAt(i);
+            if (curChar != SELECTION_HANDLE) {
+                if (digitsSeen > 0 && digitsSeen % spacing == 0) {
+                    sb.insert(0, separator);
+                }
+                ++digitsSeen;
+            }
+            sb.insert(0, curChar);
+        }
+        return sb.toString();
+    }
+
+    private int getSeparatorDistance(Base base) {
+        switch(base) {
+            case DECIMAL:
+                return getDecSeparatorDistance();
+            default:
+                return -1;
+        }
+    }
+
+    public int getDecSeparatorDistance() {
+        return mDecSeparatorDistance;
+    }
+
+
+    public char getSeparator(Base base) {
+        switch(base) {
+            case DECIMAL:
+                return getDecSeparator();
+            default:
+                return 0;
+        }
+    }
+
+    public char getDecSeparator() {
+        return DECIMAL_SEPARATOR;
+    }
+
+    public static boolean isNegative(String number) {
+        return number.startsWith(String.valueOf(MINUS)) || number.startsWith("-");
+    }
+
+    public enum Base {
+        DECIMAL(10);
+
+        int quickSerializable;
+
+        Base(int num) {
+            this.quickSerializable = num;
+        }
+
+    }
+    public  void rebuildConstants() {
+        DECIMAL_FORMAT = new DecimalFormatSymbols();
+
+        // These will already be known by Java
+        DECIMAL_POINT = DECIMAL_FORMAT.getDecimalSeparator();
+        DECIMAL_SEPARATOR = DECIMAL_FORMAT.getGroupingSeparator();
+
+        String number = "A-F0-9" +
+                Pattern.quote(String.valueOf(DECIMAL_POINT)) +
+                Pattern.quote(String.valueOf(DECIMAL_SEPARATOR));
+
+        REGEX_NUMBER = "[" + number + "]";
+        REGEX_NOT_NUMBER = "[^" + number + "]";
+    }
 
 }

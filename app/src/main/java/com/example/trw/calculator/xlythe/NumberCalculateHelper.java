@@ -113,7 +113,7 @@ public class NumberCalculateHelper {
         return null;
     }
 
-    private static Object[] removeWhitespace(String[] strings) {
+    public static Object[] removeWhitespace(String[] strings) {
         ArrayList<String> formatted = new ArrayList<String>(strings.length);
         for(String s : strings) {
             if(s != null && !s.isEmpty()) formatted.add(s);
@@ -122,6 +122,9 @@ public class NumberCalculateHelper {
     }
 
     public static String groupSentence(String originalText, int selectionHandle) {
+        if (originalText == null) {
+            return null;
+        }
         if(originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
 
         String[] operations = originalText.split(REGEX_NUMBER);
@@ -174,13 +177,16 @@ public class NumberCalculateHelper {
                 remainder = number;
             }
         }
-        
+
         String modifiedNumber = group(wholeNumber, getSeparatorDistance(base), getSeparator(base));
 
         return sign + modifiedNumber + remainder;
     }
 
-    private static String group(String wholeNumber, int spacing, char separator) {
+    public static String group(String wholeNumber, int spacing, char separator) {
+        if (wholeNumber == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
         int digitsSeen = 0;
         for (int i=wholeNumber.length()-1; i>=0; --i) {
@@ -209,7 +215,6 @@ public class NumberCalculateHelper {
         return mDecSeparatorDistance;
     }
 
-
     public static char getSeparator(Base base) {
         switch(base) {
             case DECIMAL:
@@ -224,10 +229,13 @@ public class NumberCalculateHelper {
     }
 
     public static boolean isNegative(String number) {
-        return number.startsWith(String.valueOf(MINUS)) || number.startsWith("-");
+        return number != null && (number.startsWith(MINUS));
     }
 
     public static String getResult(String value) {
+        if (value == null) {
+            return null;
+        }
         double decimal;
         String str = value.replaceAll(",", "");
         if (str.length() == 0) {

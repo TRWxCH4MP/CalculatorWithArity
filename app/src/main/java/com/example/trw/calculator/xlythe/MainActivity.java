@@ -212,8 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showResult(String result) {
         if (result != null) {
             txtView.setText(result);
-        }
-        else if (result == null) {
+        } else {
             Toast.makeText(this, "Cannot Calculate !", Toast.LENGTH_SHORT).show();
         }
     }
@@ -227,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showResult(showResult);
             setSelection();
         }
-        else if (result == null) {
+        else {
             txtView.setText("0");
         }
     }

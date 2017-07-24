@@ -2,7 +2,6 @@ package com.example.trw.calculator.xlythe;
 
 import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -19,8 +18,6 @@ public class NumberCalculateHelper {
 
     static DecimalFormat formatterResult = new DecimalFormat("#,###.00");
     static DecimalFormat formatterResult2 = new DecimalFormat("#,###");
-
-    public static String CURRENT_ACTION;
 
     public static final String PLUS = "+";
     public static final String MINUS = "-";
@@ -177,7 +174,7 @@ public class NumberCalculateHelper {
                 remainder = number;
             }
         }
-
+        
         String modifiedNumber = group(wholeNumber, getSeparatorDistance(base), getSeparator(base));
 
         return sign + modifiedNumber + remainder;
@@ -231,7 +228,7 @@ public class NumberCalculateHelper {
     }
 
     public static String getResult(String value) {
-        double decimal = 0;
+        double decimal;
         String str = value.replaceAll(",", "");
         if (str.length() == 0) {
             return null;

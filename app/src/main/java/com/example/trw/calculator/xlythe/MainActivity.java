@@ -8,13 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.trw.calculator.R;
-import org.javia.arity.Symbols;
-import org.javia.arity.SyntaxException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -27,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnPlus, btnMinus, btnMultiply,
             btnDivide, btnDelete, btnDot, btnEnter;
 
-
+    public static String CURRENT_ACTION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,36 +119,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 formatText(input);
                 break;
             case R.id.btnPlus:
-                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.PLUS;
-                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
-                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
+                CURRENT_ACTION = NumberCalculateHelper.PLUS;
+                onOperatorChanged(CURRENT_ACTION);
+                onNumberValueChanged(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnMinus:
-                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.MINUS;
+                CURRENT_ACTION = NumberCalculateHelper.MINUS;
                 if (edtText.getText().toString().length() <= 0) {
-                    edtText.setText(edtText.getText().toString() + NumberCalculateHelper.CURRENT_ACTION);
+                    edtText.setText(edtText.getText().toString() + CURRENT_ACTION);
                 } else {
-                    onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
-                    onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
+                    onOperatorChanged(CURRENT_ACTION);
+                    onNumberValueChanged(CURRENT_ACTION);
                 }
                 setSelection();
                 break;
             case R.id.btnMultiply:
-                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.MULTIPLY;
-                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
-                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
+                CURRENT_ACTION = NumberCalculateHelper.MULTIPLY;
+                onOperatorChanged(CURRENT_ACTION);
+                onNumberValueChanged(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDivide:
-                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.DIVIDE;
-                onOperatorChanged(NumberCalculateHelper.CURRENT_ACTION);
-                onNumberValueChanged(NumberCalculateHelper.CURRENT_ACTION);
+                CURRENT_ACTION = NumberCalculateHelper.DIVIDE;
+                onOperatorChanged(CURRENT_ACTION);
+                onNumberValueChanged(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDot:
-                NumberCalculateHelper.CURRENT_ACTION = NumberCalculateHelper.DOT;
-                dotOperator(NumberCalculateHelper.CURRENT_ACTION);
+                CURRENT_ACTION = NumberCalculateHelper.DOT;
+                dotOperator(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDelete:
@@ -163,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String result = NumberCalculateHelper.getResult(edtText.getText().toString());
                 showResult(result);
 
-                String text = "1500+0.5+1000000";
+                /*String text = "1500+0.5+1000000";
                 String resultTest = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
-                Toast.makeText(this, "= "+ resultTest, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "= "+ resultTest, Toast.LENGTH_SHORT).show();*/
                 break;
         }
     }
@@ -237,15 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     public void setSelection() {
         edtText.setSelection(edtText.getText().length());
     }
-
-
-
-
-
-
-
 }

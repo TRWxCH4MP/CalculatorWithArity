@@ -19,22 +19,6 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private DecimalFormatSymbols DECIMAL_FORMAT;
-    public char DECIMAL_POINT;
-    public char DECIMAL_SEPARATOR;
-
-    private String REGEX_NUMBER;
-    private String REGEX_NOT_NUMBER;
-
-    private Base mBase = Base.DECIMAL;
-
-    public final char SELECTION_HANDLE = '\u2620';
-    private final int mDecSeparatorDistance = 3;
-
-    public char getDecimalPoint() {
-        return DECIMAL_POINT;
-    }
-
     String input;
     Symbols symbols = new Symbols();
     TextView txtView;
@@ -44,12 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnPlus, btnMinus, btnMultiply,
             btnDivide, btnDelete, btnDot, btnEnter;
 
-
-    private static final char PLUS = '+';
-    private static final char MINUS = '-';
-    private static final char MULTIPLY = '*';
-    private static final char DIVIDE = '/';
-    private static final char DOT = '.';
 
     private char CURRENT_ACTION;
 
@@ -61,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initInstance();
-        rebuildConstants();
         
     }
     public void initInstance() {
@@ -151,13 +128,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 formatText(input);
                 break;
             case R.id.btnPlus:
-                CURRENT_ACTION = PLUS;
+                CURRENT_ACTION = NumberCalculateHelper.PLUS;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnMinus:
-                CURRENT_ACTION = MINUS;
+                CURRENT_ACTION = NumberCalculateHelper.MINUS;
                 if (edtText.getText().toString().length() <= 0) {
                     edtText.setText(edtText.getText().toString() + CURRENT_ACTION);
                 }
@@ -168,32 +145,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setSelection();
                 break;
             case R.id.btnMultiply:
-                CURRENT_ACTION = MULTIPLY;
+                CURRENT_ACTION = NumberCalculateHelper.MULTIPLY;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDivide:
-                CURRENT_ACTION = DIVIDE;
+                CURRENT_ACTION = NumberCalculateHelper.DIVIDE;
                 changeOperator(CURRENT_ACTION);
                 checkOperator(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDot:
-                CURRENT_ACTION = DOT;
+                CURRENT_ACTION = NumberCalculateHelper.DOT;
                 dotOperator(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnDelete:
-                deleteText();
+                onTextDelete();
                 getResult();
                 break;
             case R.id.btnEnter:
                 getResult();
 
-                /*String text = "1500+0.5+1000000";
-                String result = groupSentence(text, SELECTION_HANDLE);
-                Toast.makeText(this, "= "+ result, Toast.LENGTH_SHORT).show();*/
+                String text = "1500+0.5+1000000";
+                String result = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
+                Toast.makeText(this, "= "+ result, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -229,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 split1.get(index).equals("*") ||
                 split1.get(index).equals("/")) {
             if (str.length() != 1) {
-                deleteText();
+                onTextDelete();
                 edtText.setText(edtText.getText().toString() + action);
             }
         }
@@ -280,26 +257,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void deleteText() {
-        String textString = edtText.getText().toString();
-        String originalString;
-        String afterText;
-        if (textString.length() > 0) {
-            originalString = textString.substring(0, textString.length() - 1);
-
-            if (originalString.contains(",")) {
-                originalString = originalString.replaceAll(",", "");
-                afterText = groupSentence(originalString, SELECTION_HANDLE);
-                edtText.setText(afterText);
-            } else {
-                edtText.setText(originalString);
-            }
+    private void onTextDelete(){
+        String value = edtText.getText().toString();
+        String result = NumberCalculateHelper.deleteText(value);
+        if (result != null) {
+            edtText.setText(result);
         }
-        else if (textString.length() == 0) {
-            txtView.setText("0");
+        else {
+            edtText.setText(null);
         }
         setSelection();
     }
+
+
 
     public void setSelection() {
         edtText.setSelection(edtText.getText().length());
@@ -311,150 +281,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (text.contains(",")) {
             text = text.replaceAll(",", "");
         }
-        String afterText = groupSentence(text, SELECTION_HANDLE);
+        String afterText = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
         edtText.setText(afterText);
         getResult();
         setSelection();
         return null;
     }
 
-    private Object[] removeWhitespace(String[] strings) {
-        ArrayList<String> formatted = new ArrayList<String>(strings.length);
-        for(String s : strings) {
-            if(s != null && !s.isEmpty()) formatted.add(s);
-        }
-        return formatted.toArray();
-    }
-
-    public String groupSentence(String originalText, int selectionHandle) {
-        if(originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
-
-        String[] operations = originalText.split(REGEX_NUMBER);
-        String[] numbers = originalText.split(REGEX_NOT_NUMBER);
-        String[] translatedNumbers = new String[numbers.length];
-        for(int i = 0; i < numbers.length; i++) {
-            if(!numbers[i].isEmpty()) {
-                translatedNumbers[i] = groupDigits(numbers[i], mBase);
-            }
-        }
-        String text = "";
-        Object[] o = removeWhitespace(operations);
-        Object[] n = removeWhitespace(translatedNumbers);
-        if(originalText.substring(0, 1).matches(REGEX_NUMBER)) {
-            for(int i = 0; i < o.length && i < n.length; i++) {
-                text += n[i];
-                text += o[i];
-            }
-        } else {
-            for(int i = 0; i < o.length && i < n.length; i++) {
-                text += o[i];
-                text += n[i];
-            }
-        }
-        if(o.length > n.length) {
-            text += o[o.length - 1];
-        } else if(n.length > o.length) {
-            text += n[n.length - 1];
-        }
-
-        return text;
-    }
-
-    public String groupDigits(String number, Base base) {
-        String sign = "";
-        if(isNegative(number)) {
-            sign = String.valueOf(MINUS);
-            number = number.substring(1);
-        }
-        String wholeNumber = number;
-        String remainder = "";
-        // We only group the whole number
-        if(number.contains(getDecimalPoint()+"")) {
-            if(!number.startsWith(getDecimalPoint()+"")) {
-                String[] temp = number.split(Pattern.quote(getDecimalPoint()+""));
-                wholeNumber = temp[0];
-                remainder = getDecimalPoint() + ((temp.length == 1) ? "" : temp[1]);
-            } else {
-                wholeNumber = "";
-                remainder = number;
-            }
-        }
-
-        String modifiedNumber = group(wholeNumber, getSeparatorDistance(base), getSeparator(base));
-
-        return sign + modifiedNumber + remainder;
-    }
-
-    private String group(String wholeNumber, int spacing, char separator) {
-        StringBuilder sb = new StringBuilder();
-        int digitsSeen = 0;
-        for (int i=wholeNumber.length()-1; i>=0; --i) {
-            char curChar = wholeNumber.charAt(i);
-            if (curChar != SELECTION_HANDLE) {
-                if (digitsSeen > 0 && digitsSeen % spacing == 0) {
-                    sb.insert(0, separator);
-                }
-                ++digitsSeen;
-            }
-            sb.insert(0, curChar);
-        }
-        return sb.toString();
-    }
-
-    private int getSeparatorDistance(Base base) {
-        switch(base) {
-            case DECIMAL:
-                return getDecSeparatorDistance();
-            default:
-                return -1;
-        }
-    }
-
-    public int getDecSeparatorDistance() {
-        return mDecSeparatorDistance;
-    }
 
 
-    public char getSeparator(Base base) {
-        switch(base) {
-            case DECIMAL:
-                return getDecSeparator();
-            default:
-                return 0;
-        }
-    }
 
-    public char getDecSeparator() {
-        return DECIMAL_SEPARATOR;
-    }
 
-    public static boolean isNegative(String number) {
-        return number.startsWith(String.valueOf(MINUS)) || number.startsWith("-");
-    }
 
-    public enum Base {
-        DECIMAL(10);
 
-        int quickSerializable;
 
-        Base(int num) {
-            this.quickSerializable = num;
-        }
-
-    }
-    public  void rebuildConstants() {
-        DECIMAL_FORMAT = new DecimalFormatSymbols();
-
-        // These will already be known by Java
-        DECIMAL_POINT = DECIMAL_FORMAT.getDecimalSeparator();
-        DECIMAL_SEPARATOR = DECIMAL_FORMAT.getGroupingSeparator();
-
-        String number = "A-F0-9" +
-                Pattern.quote(String.valueOf(DECIMAL_POINT)) +
-                Pattern.quote(String.valueOf(DECIMAL_SEPARATOR));
-
-        REGEX_NUMBER = "[" + number + "]";
-        REGEX_NOT_NUMBER = "[^" + number + "]";
-    }
 
 }

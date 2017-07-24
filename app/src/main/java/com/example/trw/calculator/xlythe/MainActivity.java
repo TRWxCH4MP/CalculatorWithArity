@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String REGEX_NUMBER;
     private String REGEX_NOT_NUMBER;
 
-
     private Base mBase = Base.DECIMAL;
 
     public final char SELECTION_HANDLE = '\u2620';
@@ -63,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initInstance();
         rebuildConstants();
-
-
+        
     }
     public void initInstance() {
 

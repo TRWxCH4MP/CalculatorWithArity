@@ -125,12 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnMinus:
                 CURRENT_ACTION = NumberCalculateHelper.MINUS;
-                if (edtText.getText().toString().length() <= 0) {
-                    edtText.setText(edtText.getText().toString() + CURRENT_ACTION);
-                } else {
-                    onOperatorChanged(CURRENT_ACTION);
-                    onNumberValueChanged(CURRENT_ACTION);
-                }
+                onOperatorChanged(CURRENT_ACTION);
+                onNumberValueChanged(CURRENT_ACTION);
                 setSelection();
                 break;
             case R.id.btnMultiply:
@@ -156,10 +152,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnEnter:
                 String result = NumberCalculateHelper.getResult(edtText.getText().toString());
                 showResult(result);
-
-                /*String text = "1500+0.5+1000000";
-                String resultTest = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
-                Toast.makeText(this, "= "+ resultTest, Toast.LENGTH_SHORT).show();*/
                 break;
         }
     }

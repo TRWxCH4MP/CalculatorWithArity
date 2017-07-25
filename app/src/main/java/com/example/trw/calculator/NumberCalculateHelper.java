@@ -73,6 +73,11 @@ public class NumberCalculateHelper {
     public static String checkNumberInsert(String value, String operator) {
         if (value == null || value.matches(REGEX_NOT_NUMBER)) { return null; }
 
+        if (value.length() <= 0) {
+            if (operator.matches(MINUS)) {
+                return String.format("%s", operator);
+            }
+        }
         int index;
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
             index = split1.size() - 1;

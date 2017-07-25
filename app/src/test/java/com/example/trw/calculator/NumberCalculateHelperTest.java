@@ -103,6 +103,13 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
+    public void groupSentence_correctWithNumberStartWithMinus() {
+        String groupSentence = NumberCalculateHelper.groupSentence("-1500",
+                NumberCalculateHelper.SELECTION_HANDLE);
+        Assert.assertEquals("-1,500", groupSentence);
+    }
+
+    @Test
     public void groupSentence_incorrectWithNull() {
         String groupSentence = NumberCalculateHelper.groupSentence(null,
                 NumberCalculateHelper.SELECTION_HANDLE);
@@ -117,10 +124,17 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
-    public void groupSentence_correctWithNumberStartWithMinus() {
-        String groupSentence = NumberCalculateHelper.groupSentence("-1500",
+    public void groupSentence_correctWithObjectOperatorMoreThanObjectNumber() {
+        String groupSentence = NumberCalculateHelper.groupSentence("-1+2+3",
                 NumberCalculateHelper.SELECTION_HANDLE);
-        Assert.assertEquals("-1,500", groupSentence);
+        Assert.assertEquals("-1+2+3", groupSentence);
+    }
+
+    @Test
+    public void groupSentence_correctWithObjectNumberMoreThanObjectOperator() {
+        String groupSentence = NumberCalculateHelper.groupSentence("1+2",
+                NumberCalculateHelper.SELECTION_HANDLE);
+        Assert.assertEquals("1+2", groupSentence);
     }
 
     @Test
@@ -197,7 +211,7 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
-    public void getSeparatorDistance_correct() {
+    public void getSeparatorDistance_correctWithNoPassBase() {
         int getSeparatorDistance = NumberCalculateHelper
                 .getDecSeparatorDistance();
         Assert.assertEquals(3, getSeparatorDistance);

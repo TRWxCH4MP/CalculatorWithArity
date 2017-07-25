@@ -191,7 +191,7 @@ public class NumberCalculateHelper {
         return sb.toString();
     }
 
-    private static int getSeparatorDistance(Base base) {
+    public static int getSeparatorDistance(Base base) {
         switch(base) {
             case DECIMAL:
                 return getDecSeparatorDistance();
@@ -222,14 +222,11 @@ public class NumberCalculateHelper {
     }
 
     public static String getResult(String value) {
-        if (value == null) {
-            return null;
-        }
-        double decimal;
-        String str = value.replaceAll(",", "");
-        if (str.length() == 0) {
+        if (value == null || value.isEmpty()) {
             return null;
         } else {
+            double decimal;
+            String str = value.replaceAll(",", "");
             try {
                 decimal = symbols.eval(str);
             } catch (SyntaxException ex) {

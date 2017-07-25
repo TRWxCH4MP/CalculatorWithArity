@@ -33,6 +33,7 @@ public class NumberCalculateHelperTest {
         Assert.assertEquals(null, changeOperator);
     }
 
+
     @Test
     public void checkNumberInsert_correctStartWithNumber() {
         String checkNumberInsert = NumberCalculateHelper.checkNumberInsert("10","+");
@@ -70,6 +71,12 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
+    public void deleteText_correctWithNumberWithSeparator() {
+        String deleteText = NumberCalculateHelper.deleteText("1,000");
+        Assert.assertEquals("100", deleteText);
+    }
+
+    @Test
     public void deleteText_incorrectWithNull() {
         String deleteText = NumberCalculateHelper.deleteText(null);
         Assert.assertEquals(null, deleteText);
@@ -79,12 +86,6 @@ public class NumberCalculateHelperTest {
     public void deleteText_incorrectWithEmpty() {
         String deleteText = NumberCalculateHelper.deleteText("");
         Assert.assertEquals(null, deleteText);
-    }
-
-    @Test
-    public void deleteText_incorrectWithNumberWithSeparator() {
-        String deleteText = NumberCalculateHelper.deleteText("1,000");
-        Assert.assertEquals("100", deleteText);
     }
 
     @Test

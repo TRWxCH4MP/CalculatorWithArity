@@ -97,8 +97,6 @@ public class NumberCalculateHelper {
                 } else {
                     return originalString;
                 }
-            } else if (value.length() == 0) {
-                return null;
             }
         return null;
     }

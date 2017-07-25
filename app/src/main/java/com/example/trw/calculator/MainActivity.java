@@ -204,8 +204,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String result = NumberCalculateHelper.checkNumberInsert(value, operator);
         if(result != null) {
             edtText.setText(result);
-        } else {
-            Toast.makeText(this, "Cannot Input !", Toast.LENGTH_SHORT).show();
         }
     }
     private void showResult(String result) {

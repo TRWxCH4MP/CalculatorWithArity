@@ -47,6 +47,7 @@ public class NumberCalculateHelper {
         }
 
     }
+
     public static char getDecimalPoint() {
         return DECIMAL_POINT;
     }
@@ -57,10 +58,10 @@ public class NumberCalculateHelper {
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
         int index;
         index = split1.size() - 1;
-        if (split1.get(index).equals("+") ||
-                split1.get(index).equals("-") ||
-                split1.get(index).equals("*") ||
-                split1.get(index).equals("/")) {
+        if (split1.get(index).equals(PLUS) ||
+                split1.get(index).equals(MINUS) ||
+                split1.get(index).equals(MULTIPLY) ||
+                split1.get(index).equals(DIVIDE)) {
             if (value.length() != 1) {
                 value = deleteText(value);
                 return String.format("%s%s", value, operator);

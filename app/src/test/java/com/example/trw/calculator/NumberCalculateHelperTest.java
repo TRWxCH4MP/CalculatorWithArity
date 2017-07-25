@@ -40,7 +40,7 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
-    public void checkNumberInsert_incorrectStartWithDot() {
+    public void checkNumberInsert_incorrectStartWithDecimalPoint() {
         String checkNumberInsert = NumberCalculateHelper.checkNumberInsert(".","+");
         Assert.assertEquals(null, checkNumberInsert);
     }
@@ -79,6 +79,12 @@ public class NumberCalculateHelperTest {
     public void deleteText_incorrectWithEmpty() {
         String deleteText = NumberCalculateHelper.deleteText("");
         Assert.assertEquals(null, deleteText);
+    }
+
+    @Test
+    public void deleteText_incorrectWithNumberWithSeparator() {
+        String deleteText = NumberCalculateHelper.deleteText("1,000");
+        Assert.assertEquals("100", deleteText);
     }
 
     @Test
@@ -156,6 +162,13 @@ public class NumberCalculateHelperTest {
         String groupDigits = NumberCalculateHelper.groupDigits("-1.5",
                 NumberCalculateHelper.Base.DECIMAL);
         Assert.assertEquals("-1.5", groupDigits);
+    }
+
+    @Test
+    public void groupDigits_correctWithNumberStartWithDecimalPoint() {
+        String groupDigits = NumberCalculateHelper.groupDigits(".25",
+                NumberCalculateHelper.Base.DECIMAL);
+        Assert.assertEquals(".25", groupDigits);
     }
 
     @Test

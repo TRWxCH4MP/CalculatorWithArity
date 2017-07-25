@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 public class NumberCalculateHelper {
 
     private static Symbols symbols = new Symbols();
-
     private static DecimalFormat formatterResult = new DecimalFormat("#,###.00");
     private static DecimalFormat formatterResult2 = new DecimalFormat("#,###");
 
@@ -33,7 +32,7 @@ public class NumberCalculateHelper {
     public static String REGEX_NUMBER = "[A-F0-9.,]";
     public static String REGEX_NOT_NUMBER = "[^A-F0-9.,]";
 
-    private static Base mBase = Base.DECIMAL;
+    public static Base mBase = Base.DECIMAL;
 
     public static final char SELECTION_HANDLE = '\u2620';
     private static final int mDecSeparatorDistance = 3;

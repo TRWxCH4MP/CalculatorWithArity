@@ -26,15 +26,12 @@ public class NumberCalculateHelper {
     public static final String DOT = ".";
 
     public static DecimalFormatSymbols DECIMAL_FORMAT = new DecimalFormatSymbols();
+
     public static char DECIMAL_POINT = DECIMAL_FORMAT.getDecimalSeparator();
     public static char DECIMAL_SEPARATOR = DECIMAL_FORMAT.getGroupingSeparator();
 
-    public static String number = "A-F0-9" +
-            Pattern.quote(String.valueOf(DECIMAL_POINT)) +
-            Pattern.quote(String.valueOf(DECIMAL_SEPARATOR));
-
-    private static String REGEX_NUMBER = "[" + number + "]";
-    private static String REGEX_NOT_NUMBER = "[^" + number + "]";
+    public static String REGEX_NUMBER = "[A-F0-9.,]";
+    public static String REGEX_NOT_NUMBER = "[^A-F0-9.,]";
 
     private static Base mBase = Base.DECIMAL;
 
@@ -129,6 +126,7 @@ public class NumberCalculateHelper {
         if (originalText == null) {
             return null;
         }
+
         if(originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
 
         String[] operations = originalText.split(REGEX_NUMBER);

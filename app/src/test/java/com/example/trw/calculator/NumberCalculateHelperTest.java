@@ -229,8 +229,8 @@ public class NumberCalculateHelperTest {
 
     @Test
     public void getResult_correctWithDecimalNumber() {
-        String getResult = NumberCalculateHelper.getResult("1500.50+50");
-        Assert.assertEquals("1,550.50", getResult);
+        String getResult = NumberCalculateHelper.getResult("1500.50+50-25");
+        Assert.assertEquals("1,525.50", getResult);
     }
 
     @Test

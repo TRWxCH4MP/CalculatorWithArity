@@ -1,4 +1,4 @@
-package com.example.trw.calculator.xlythe;
+package com.example.trw.calculator;
 
 import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
@@ -14,10 +14,10 @@ import java.util.regex.Pattern;
 
 public class NumberCalculateHelper {
 
-    static Symbols symbols = new Symbols();
+    private static Symbols symbols = new Symbols();
 
-    static DecimalFormat formatterResult = new DecimalFormat("#,###.00");
-    static DecimalFormat formatterResult2 = new DecimalFormat("#,###");
+    private static DecimalFormat formatterResult = new DecimalFormat("#,###.00");
+    private static DecimalFormat formatterResult2 = new DecimalFormat("#,###");
 
     public static final String PLUS = "+";
     public static final String MINUS = "-";
@@ -56,6 +56,8 @@ public class NumberCalculateHelper {
     }
 
     public static String changeOperator(String value, String operator) {
+        if (value == null) { return null; }
+
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
         int size;
         int index;
@@ -74,6 +76,8 @@ public class NumberCalculateHelper {
     }
 
     public static String checkNumberInsert(String value, String operator) {
+        if (value == null) { return null; }
+
         int sizeSplit;
         int index;
         int index2;

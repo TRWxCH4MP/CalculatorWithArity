@@ -1,13 +1,8 @@
 package com.example.trw.calculator;
 
-import com.example.trw.calculator.xlythe.NumberCalculateHelper;
-
-import org.javia.arity.Symbol;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by TRW on 24/7/2560.
@@ -16,75 +11,27 @@ import java.util.Arrays;
 public class NumberCalculateHelperTest {
 
     @Test
-    public void isNegative_correctWithNegativeNumber() {
-        boolean isNegative =  NumberCalculateHelper.isNegative("-10");
-        Assert.assertTrue(isNegative);
-    }
-
-    @Test
-    public void isNegative_incorrectWithPositiveNumber() {
-        boolean isNegative =  NumberCalculateHelper.isNegative("10");
-        Assert.assertFalse(isNegative);
-    }
-
-    @Test
-    public void isNegative_incorrectWithNull() {
-        boolean isNegative =  NumberCalculateHelper.isNegative(null);
-        Assert.assertFalse(isNegative);
-    }
-
-    @Test
-    public void isNegative_incorrectWithEmptyString() {
-        boolean isNegative =  NumberCalculateHelper.isNegative("");
-        Assert.assertFalse(isNegative);
-    }
-
-    @Test
-    public void getSeparator_correct() {
-        char getSeparator = NumberCalculateHelper.getSeparator(NumberCalculateHelper.Base.DECIMAL);
-        Assert.assertEquals(',', getSeparator);
-    }
-
-    @Test
-    public void getResult_correctWithNormalNumber() {
-        String getResult = NumberCalculateHelper.getResult("1500+50");
-        Assert.assertEquals("1,550", getResult);
-    }
-
-    @Test
-    public void getResult_correctWithDecimalNumber() {
-        String getResult = NumberCalculateHelper.getResult("1500.50+50");
-        Assert.assertEquals("1,550.50", getResult);
-    }
-
-    @Test
-    public void getResult_incorrectWithoutNumber() {
-        String getResult = NumberCalculateHelper.getResult("1500.50+");
-        Assert.assertEquals(null, getResult);
-    }
-
-    @Test
-    public void getResult_incorrectWithNull() {
-        String getResult = NumberCalculateHelper.getResult(null);
-        Assert.assertEquals(null, getResult);
-    }
-
-    @Test
-    public void getResult_incorrectWithEmpty() {
-        String getResult = NumberCalculateHelper.getResult("");
-        Assert.assertEquals(null, getResult);
-    }
-
-    @Test
     public void changeOperator_correctWithChangeOperator() {
         String changeOperator = NumberCalculateHelper.changeOperator("15+","-");
         Assert.assertEquals("15-", changeOperator);
     }
 
     @Test
-    public void changeOperator_incorrectWithChangeOperator() {
+    public void changeOperator_incorrectWithNoChangeOperator() {
         String changeOperator = NumberCalculateHelper.changeOperator("15+","+");
         Assert.assertEquals("15+", changeOperator);
+    }
+
+    @Test
+    public void changeOperator_incorrectStartWithEmpty() {
+        String changeOperator = NumberCalculateHelper.changeOperator("", "+");
+        Assert.assertEquals(null, changeOperator);
+    }
+
+    @Test
+    public void changeOperator_incorrectStartWithNull() {
+        String changeOperator = NumberCalculateHelper.changeOperator(null, "+");
+        Assert.assertEquals(null, changeOperator);
     }
 
     @Test
@@ -96,6 +43,18 @@ public class NumberCalculateHelperTest {
     @Test
     public void checkNumberInsert_incorrectStartWithDot() {
         String checkNumberInsert = NumberCalculateHelper.checkNumberInsert(".","+");
+        Assert.assertEquals(null, checkNumberInsert);
+    }
+
+    @Test
+    public void checkNumberInsert_incorrectStartWithEmpty() {
+        String checkNumberInsert = NumberCalculateHelper.checkNumberInsert("","+");
+        Assert.assertEquals(null, checkNumberInsert);
+    }
+
+    @Test
+    public void checkNumberInsert_incorrectStartWithNull() {
+        String checkNumberInsert = NumberCalculateHelper.checkNumberInsert(null,"+");
         Assert.assertEquals(null, checkNumberInsert);
     }
 
@@ -201,6 +160,12 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
+    public void group_correctWithNormalNumber() {
+        String group = NumberCalculateHelper.group("100", 3, ',');
+        Assert.assertEquals("100", group);
+    }
+
+    @Test
     public void group_correctWithThousandsNumber() {
         String group = NumberCalculateHelper.group("1000", 3, ',');
         Assert.assertEquals("1,000", group);
@@ -219,12 +184,71 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
-    public void group_correctWithHundredNumber() {
-        String group = NumberCalculateHelper.group("100", 3, ',');
-        Assert.assertEquals("100", group);
+    public void getSeparatorDistance_correct() {
+        int getSeparatorDistance = NumberCalculateHelper
+                .getDecSeparatorDistance();
+        Assert.assertEquals(3, getSeparatorDistance);
     }
 
+    @Test
+    public void getSeparator_correct() {
+        char getSeparator = NumberCalculateHelper
+                .getSeparator(NumberCalculateHelper.Base.DECIMAL);
+        Assert.assertEquals(',', getSeparator);
+    }
 
+    @Test
+    public void isNegative_correctWithNegativeNumber() {
+        boolean isNegative =  NumberCalculateHelper.isNegative("-10");
+        Assert.assertTrue(isNegative);
+    }
 
+    @Test
+    public void isNegative_incorrectWithPositiveNumber() {
+        boolean isNegative =  NumberCalculateHelper.isNegative("10");
+        Assert.assertFalse(isNegative);
+    }
+
+    @Test
+    public void isNegative_incorrectWithNull() {
+        boolean isNegative =  NumberCalculateHelper.isNegative(null);
+        Assert.assertFalse(isNegative);
+    }
+
+    @Test
+    public void isNegative_incorrectWithEmptyString() {
+        boolean isNegative =  NumberCalculateHelper.isNegative("");
+        Assert.assertFalse(isNegative);
+    }
+
+    @Test
+    public void getResult_correctWithNormalNumber() {
+        String getResult = NumberCalculateHelper.getResult("1500+50");
+        Assert.assertEquals("1,550", getResult);
+    }
+
+    @Test
+    public void getResult_correctWithDecimalNumber() {
+        String getResult = NumberCalculateHelper.getResult("1500.50+50");
+        Assert.assertEquals("1,550.50", getResult);
+    }
+
+    @Test
+    public void getResult_incorrectWithoutNumber() {
+        String getResult = NumberCalculateHelper.getResult("1500.50+");
+        Assert.assertEquals(null, getResult);
+    }
+
+    @Test
+    public void getResult_incorrectWithNull() {
+        String getResult = NumberCalculateHelper.getResult(null);
+        Assert.assertEquals(null, getResult);
+    }
+
+    @Test
+    public void getResult_incorrectWithEmpty() {
+        String getResult = NumberCalculateHelper.getResult("");
+        Assert.assertEquals(null, getResult);
+    }
 
 }

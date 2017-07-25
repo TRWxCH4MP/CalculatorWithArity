@@ -1,4 +1,4 @@
-package com.example.trw.calculator.xlythe;
+package com.example.trw.calculator;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.trw.calculator.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(result != null) {
             edtText.setText(result);
         } else {
-            Toast.makeText(this, "cannot input !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Cannot Input !", Toast.LENGTH_SHORT).show();
         }
     }
     private void showResult(String result) {

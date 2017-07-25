@@ -3,7 +3,6 @@ package com.example.trw.calculator;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 /**
  * Created by TRW on 24/7/2560.
  */
@@ -225,6 +224,18 @@ public class NumberCalculateHelperTest {
     public void getResult_correctWithNormalNumber() {
         String getResult = NumberCalculateHelper.getResult("1500+50");
         Assert.assertEquals("1,550", getResult);
+    }
+
+    @Test
+    public void getResult_correctWithNumberWithSeparator() {
+        String getResult = NumberCalculateHelper.getResult("1,500+50");
+        Assert.assertEquals("1,550", getResult);
+    }
+
+    @Test
+    public void getResult_correctWithNegativeNumber() {
+        String getResult = NumberCalculateHelper.getResult("-1500+50");
+        Assert.assertEquals("-1,450", getResult);
     }
 
     @Test

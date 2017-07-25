@@ -56,10 +56,8 @@ public class NumberCalculateHelper {
         if (value == null) { return null; }
 
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
-        int size;
         int index;
-        size = split1.size();
-        index = size - 1;
+        index = split1.size() - 1;
         if (split1.get(index).equals("+") ||
                 split1.get(index).equals("-") ||
                 split1.get(index).equals("*") ||
@@ -73,29 +71,23 @@ public class NumberCalculateHelper {
     }
 
     public static String checkNumberInsert(String value, String operator) {
-        if (value == null) { return null; }
+        if (value == null || value.matches(REGEX_NOT_NUMBER)) { return null; }
 
-        int sizeSplit;
         int index;
-        int index2;
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
-        try {
-            sizeSplit = split1.size();
-            index = sizeSplit - 1;
-            index2 = Integer.parseInt(split1.get(index));
-
-            if (index2 >= 0) {
+            index = split1.size() - 1;
+            if (split1.get(index).matches("\\d+")) {
                 return String.format("%s%s", value, operator);
+            } else {
+                return null;
             }
-        } catch (NumberFormatException ignored) {
-        }
-        return null;
     }
 
     public static String deleteText(String value) {
+        if (value == null || value.isEmpty()) { return null; }
         String originalString;
         String formatText;
-        try {
+
             if (value.length() > 0) {
                 originalString = value.substring(0, value.length() - 1);
 
@@ -109,8 +101,6 @@ public class NumberCalculateHelper {
             } else if (value.length() == 0) {
                 return null;
             }
-        } catch (NullPointerException ignored) {
-        }
         return null;
     }
 

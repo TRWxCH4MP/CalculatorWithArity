@@ -217,7 +217,7 @@ public class NumberCalculateHelperTest {
     }
 
     @Test
-    public void getSeparatorDistance_correctWithNoPassBase() {
+    public void getSeparatorDistance_correctWithNoBase() {
         int getSeparatorDistance = NumberCalculateHelper
                 .getDecSeparatorDistance();
         Assert.assertEquals(3, getSeparatorDistance);

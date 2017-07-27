@@ -296,4 +296,47 @@ public class NumberCalculateHelperTest {
         Assert.assertEquals(null, getResult);
     }
 
+    @Test
+    public void checkInsertDot_correctWithEmpty() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("", ".");
+        Assert.assertEquals("0.", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_correctStartWithOperatorPlus() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("+", ".");
+        Assert.assertEquals("+0.", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_correctStartWithOperatorMinus() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("-", ".");
+        Assert.assertEquals("-0.", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_correctStartWithOperatorMultiply() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("*", ".");
+        Assert.assertEquals("*0.", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_correctStartWithOperatorDivide() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("/", ".");
+        Assert.assertEquals("/0.", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_correctStartWithNumber() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot("10", ".");
+        Assert.assertEquals(".", checkInsertDot);
+    }
+
+    @Test
+    public void checkInsertDot_incorrectWithNull() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot(null, ".");
+        Assert.assertEquals(null, checkInsertDot);
+    }
+
+
 }

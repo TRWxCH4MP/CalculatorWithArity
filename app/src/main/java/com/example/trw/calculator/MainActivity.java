@@ -172,15 +172,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void dotOperator(String operator) {
-        ArrayList<String> ls = new ArrayList<>(Arrays.asList(edtText.getText().toString().split("")));
-        if (edtText.getText().toString().length() <= 0) {
-            edtText.setText(edtText.getText().toString() + "0" + operator);
-        } else if (ls.get(ls.size() - 1).equals("+") ||
-                ls.get(ls.size() - 1).equals("-") ||
-                ls.get(ls.size() - 1).equals("*") ||
-                ls.get(ls.size() - 1).equals("/")) {
-            edtText.setText(edtText.getText().toString() + "0" + operator);
+        String value = edtText.getText().toString();
+        String result = NumberCalculateHelper.checkInsertDot(value, operator);
 
+        if (result != null) {
+            edtText.setText(result);
         } else {
             onNumberValueChanged(operator);
         }

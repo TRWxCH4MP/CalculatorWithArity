@@ -244,4 +244,21 @@ public class NumberCalculateHelper {
         }
     }
 
+    public static String checkInsertDot(String value, String operator) {
+        if (value == null) { return null; }
+
+        ArrayList<String> listValue = new ArrayList<>(Arrays.asList(value.split("")));
+        int index = listValue.size() - 1;
+
+        if (value.isEmpty()) {
+            return value + "0" + operator;
+        } else if (listValue.get(index).equals(PLUS) ||
+                listValue.get(index).equals(MINUS) ||
+                listValue.get(index).equals(MULTIPLY) ||
+                listValue.get(index).equals(DIVIDE)) {
+            return value + "0" + operator;
+        }
+        return operator;
+    }
+
 }

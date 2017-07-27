@@ -33,6 +33,11 @@ public class NumberCalculateHelperTest {
         Assert.assertEquals(null, changeOperator);
     }
 
+    @Test
+    public void checkNumberInsert_correctWithInsertMinusWithEmptyValue() {
+        String checkNumberInsert = NumberCalculateHelper.checkNumberInsert("","-");
+        Assert.assertEquals("-", checkNumberInsert);
+    }
 
     @Test
     public void checkNumberInsert_correctStartWithNumber() {
@@ -57,6 +62,7 @@ public class NumberCalculateHelperTest {
         String checkNumberInsert = NumberCalculateHelper.checkNumberInsert(null,"+");
         Assert.assertEquals(null, checkNumberInsert);
     }
+
 
     @Test
     public void deleteText_correctWithNumber() {
@@ -125,9 +131,9 @@ public class NumberCalculateHelperTest {
 
     @Test
     public void groupSentence_correctWithObjectOperatorMoreThanObjectNumber() {
-        String groupSentence = NumberCalculateHelper.groupSentence("-1+2+3",
+        String groupSentence = NumberCalculateHelper.groupSentence("-1+",
                 NumberCalculateHelper.SELECTION_HANDLE);
-        Assert.assertEquals("-1+2+3", groupSentence);
+        Assert.assertEquals("-1+", groupSentence);
     }
 
     @Test

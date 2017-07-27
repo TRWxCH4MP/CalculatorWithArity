@@ -93,18 +93,14 @@ public class NumberCalculateHelper {
         String originalString;
         String formatText;
 
-            if (value.length() > 0) {
-                originalString = value.substring(0, value.length() - 1);
-
-                if (originalString.contains(",")) {
-                    originalString = originalString.replaceAll(",", "");
-                    formatText = groupSentence(originalString, NumberCalculateHelper.SELECTION_HANDLE);
-                    return formatText;
-                } else {
-                    return originalString;
-                }
-            }
-        return null;
+        originalString = value.substring(0, value.length() - 1);
+        if (originalString.contains(",")) {
+            originalString = originalString.replaceAll(",", "");
+            formatText = groupSentence(originalString, NumberCalculateHelper.SELECTION_HANDLE);
+            return formatText;
+        } else {
+            return originalString;
+        }
     }
 
     public static Object[] removeWhitespace(String[] strings) {

@@ -9,9 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     String input;
     TextView txtView;
@@ -29,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initInstance();
-        
+
     }
+
     public void initInstance() {
 
         txtView = (TextView) (findViewById(R.id.txtView));
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onOperatorChanged(String operator) {
         String value = edtText.getText().toString();
         String result = NumberCalculateHelper.changeOperator(value, operator);
-        if(result != null) {
+        if (result != null) {
             edtText.setText(result);
         }
     }
@@ -194,28 +197,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onNumberValueChanged(String operator) {
         String value = edtText.getText().toString();
         String result = NumberCalculateHelper.checkNumberInsert(value, operator);
-        if(result != null) {
+        if (result != null) {
             edtText.setText(result);
         }
     }
+
     private void showResult(String result) {
         if (result != null) {
             txtView.setText(result);
         } else {
-            Toast.makeText(this, "Cannot Calculate !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.CannotCalculate, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void onTextDeleted() {
         String value = edtText.getText().toString();
         String result = NumberCalculateHelper.deleteText(value);
-        if(result != null) {
+        if (result != null) {
             edtText.setText(result);
             String showResult = NumberCalculateHelper.getResult(result);
             showResult(showResult);
             setSelection();
-        }
-        else {
+        } else {
             txtView.setText("0");
         }
     }
@@ -223,4 +226,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setSelection() {
         edtText.setSelection(edtText.getText().length());
     }
+
 }

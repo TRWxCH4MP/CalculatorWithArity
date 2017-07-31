@@ -102,50 +102,43 @@ public class NumberCalculateHelperTest {
 
     @Test
     public void groupSentence_correctWithNormalNumber() {
-        String groupSentence = NumberCalculateHelper.groupSentence("1500",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("1500");
         Assert.assertEquals("1,500", groupSentence);
     }
 
     @Test
     public void groupSentence_correctWithDecimalNumber() {
-        String groupSentence = NumberCalculateHelper.groupSentence("1500.50",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("1500.50");
         Assert.assertEquals("1,500.50", groupSentence);
     }
 
     @Test
     public void groupSentence_correctWithNumberStartWithMinus() {
-        String groupSentence = NumberCalculateHelper.groupSentence("-1500",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("-1500");
         Assert.assertEquals("-1,500", groupSentence);
     }
 
     @Test
     public void groupSentence_incorrectWithNull() {
-        String groupSentence = NumberCalculateHelper.groupSentence(null,
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence(null);
         Assert.assertEquals(null, groupSentence);
     }
 
     @Test
     public void groupSentence_incorrectWithEmpty() {
-        String groupSentence = NumberCalculateHelper.groupSentence("",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("");
         Assert.assertEquals("", groupSentence);
     }
 
     @Test
     public void groupSentence_correctWithObjectOperatorMoreThanObjectNumber() {
-        String groupSentence = NumberCalculateHelper.groupSentence("-1+",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("-1+");
         Assert.assertEquals("-1+", groupSentence);
     }
 
     @Test
     public void groupSentence_correctWithObjectNumberMoreThanObjectOperator() {
-        String groupSentence = NumberCalculateHelper.groupSentence("1+2",
-                NumberCalculateHelper.SELECTION_HANDLE);
+        String groupSentence = NumberCalculateHelper.groupSentence("1+2");
         Assert.assertEquals("1+2", groupSentence);
     }
 
@@ -349,5 +342,4 @@ public class NumberCalculateHelperTest {
         String checkInsertDot = NumberCalculateHelper.checkInsertDot(".", ".");
         Assert.assertEquals(null, checkInsertDot);
     }
-
 }

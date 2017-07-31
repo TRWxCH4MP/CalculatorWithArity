@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (text.contains(",")) {
             text = text.replaceAll(",", "");
         }
-        text = NumberCalculateHelper.groupSentence(text, NumberCalculateHelper.SELECTION_HANDLE);
+        text = NumberCalculateHelper.groupSentence(text);
         edtText.setText(text);
         String result = NumberCalculateHelper.getResult(text);
         showResult(result);

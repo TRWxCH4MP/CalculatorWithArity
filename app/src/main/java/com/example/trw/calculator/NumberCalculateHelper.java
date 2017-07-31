@@ -2,6 +2,7 @@ package com.example.trw.calculator;
 
 import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
  * Created by TRW on 24/7/2560.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class NumberCalculateHelper {
 
     private static Symbols symbols = new Symbols();
@@ -54,11 +56,12 @@ public class NumberCalculateHelper {
     }
 
     public static String changeOperator(String value, String operator) {
-        if (value == null) { return null; }
+        if (value == null) {
+            return null;
+        }
 
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
-        int index;
-        index = split1.size() - 1;
+        int index = split1.size() - 1;
         if (split1.get(index).equals(PLUS) ||
                 split1.get(index).equals(MINUS) ||
                 split1.get(index).equals(MULTIPLY) ||
@@ -72,32 +75,35 @@ public class NumberCalculateHelper {
     }
 
     public static String checkNumberInsert(String value, String operator) {
-        if (value == null || value.matches(REGEX_NOT_NUMBER)) { return null; }
+        if (value == null || value.matches(REGEX_NOT_NUMBER)) {
+            return null;
+        }
 
         if (value.length() <= 0) {
             if (operator.matches(MINUS)) {
                 return String.format("%s", operator);
             }
         }
-        int index;
         ArrayList<String> split1 = new ArrayList<>(Arrays.asList(value.split("")));
-            index = split1.size() - 1;
-            if (split1.get(index).matches("\\d+")) {
-                return String.format("%s%s", value, operator);
-            } else {
-                return null;
-            }
+        int index = split1.size() - 1;
+        if (split1.get(index).matches("\\d+")) {
+            return String.format("%s%s", value, operator);
+        } else {
+            return null;
+        }
     }
 
     public static String deleteText(String value) {
-        if (value == null || value.isEmpty()) { return null; }
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
         String originalString;
         String formatText;
 
         originalString = value.substring(0, value.length() - 1);
         if (originalString.contains(",")) {
             originalString = originalString.replaceAll(",", "");
-            formatText = groupSentence(originalString, NumberCalculateHelper.SELECTION_HANDLE);
+            formatText = groupSentence(originalString);
             return formatText;
         } else {
             return originalString;
@@ -105,45 +111,45 @@ public class NumberCalculateHelper {
     }
 
     public static Object[] removeWhitespace(String[] strings) {
-        ArrayList<String> formatted = new ArrayList<String>(strings.length);
-        for(String s : strings) {
-            if(s != null && !s.isEmpty()) formatted.add(s);
+        ArrayList<String> formatted = new ArrayList<>(strings.length);
+        for (String s : strings) {
+            if (s != null && !s.isEmpty()) formatted.add(s);
         }
         return formatted.toArray();
     }
 
-    public static String groupSentence(String originalText, int selectionHandle) {
+    public static String groupSentence(String originalText) {
         if (originalText == null) {
             return null;
         }
 
-        if(originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
+        if (originalText.isEmpty() || originalText.matches(REGEX_NOT_NUMBER)) return originalText;
 
         String[] operations = originalText.split(REGEX_NUMBER);
         String[] numbers = originalText.split(REGEX_NOT_NUMBER);
         String[] translatedNumbers = new String[numbers.length];
-        for(int i = 0; i < numbers.length; i++) {
-            if(!numbers[i].isEmpty()) {
+        for (int i = 0; i < numbers.length; i++) {
+            if (!numbers[i].isEmpty()) {
                 translatedNumbers[i] = groupDigits(numbers[i], mBase);
             }
         }
         String text = "";
         Object[] o = removeWhitespace(operations);
         Object[] n = removeWhitespace(translatedNumbers);
-        if(originalText.substring(0, 1).matches(REGEX_NUMBER)) {
-            for(int i = 0; i < o.length && i < n.length; i++) {
+        if (originalText.substring(0, 1).matches(REGEX_NUMBER)) {
+            for (int i = 0; i < o.length && i < n.length; i++) {
                 text += n[i];
                 text += o[i];
             }
         } else {
-            for(int i = 0; i < o.length && i < n.length; i++) {
+            for (int i = 0; i < o.length && i < n.length; i++) {
                 text += o[i];
                 text += n[i];
             }
         }
-        if(o.length > n.length) {
+        if (o.length > n.length) {
             text += o[o.length - 1];
-        } else if(n.length > o.length) {
+        } else if (n.length > o.length) {
             text += n[n.length - 1];
         }
 
@@ -152,16 +158,16 @@ public class NumberCalculateHelper {
 
     public static String groupDigits(String number, Base base) {
         String sign = "";
-        if(isNegative(number)) {
+        if (isNegative(number)) {
             sign = String.valueOf(MINUS);
             number = number.substring(1);
         }
         String wholeNumber = number;
         String remainder = "";
         // We only group the whole number
-        if(number.contains(getDecimalPoint()+"")) {
-            if(!number.startsWith(getDecimalPoint()+"")) {
-                String[] temp = number.split(Pattern.quote(getDecimalPoint()+""));
+        if (number.contains(getDecimalPoint() + "")) {
+            if (!number.startsWith(getDecimalPoint() + "")) {
+                String[] temp = number.split(Pattern.quote(getDecimalPoint() + ""));
                 wholeNumber = temp[0];
                 remainder = getDecimalPoint() + ((temp.length == 1) ? "" : temp[1]);
             } else {
@@ -181,7 +187,7 @@ public class NumberCalculateHelper {
         }
         StringBuilder sb = new StringBuilder();
         int digitsSeen = 0;
-        for (int i=wholeNumber.length()-1; i>=0; --i) {
+        for (int i = wholeNumber.length() - 1; i >= 0; --i) {
             char curChar = wholeNumber.charAt(i);
             if (curChar != SELECTION_HANDLE) {
                 if (digitsSeen > 0 && digitsSeen % spacing == 0) {
@@ -195,7 +201,7 @@ public class NumberCalculateHelper {
     }
 
     public static int getSeparatorDistance(Base base) {
-        switch(base) {
+        switch (base) {
             case DECIMAL:
                 return getDecSeparatorDistance();
             default:
@@ -208,7 +214,7 @@ public class NumberCalculateHelper {
     }
 
     public static char getSeparator(Base base) {
-        switch(base) {
+        switch (base) {
             case DECIMAL:
                 return getDecSeparator();
             default:
@@ -236,17 +242,17 @@ public class NumberCalculateHelper {
                 return null;
             }
             if (decimal % 1 != 0) {
-                String result = formatterResult.format(decimal);
-                return result;
+                return formatterResult.format(decimal);
             } else {
-                String result = formatterResult2.format(decimal);
-                return result;
+                return formatterResult2.format(decimal);
             }
         }
     }
 
     public static String checkInsertDot(String value, String operator) {
-        if (value == null) { return null; }
+        if (value == null) {
+            return null;
+        }
 
         ArrayList<String> listValue = new ArrayList<>(Arrays.asList(value.split("")));
         int index = listValue.size() - 1;

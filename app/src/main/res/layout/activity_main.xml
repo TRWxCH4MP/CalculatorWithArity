@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <EditText
+                style="@style/TextDisplay"
                 android:layout_gravity="end"
-                style="@style/TextViewDisplay"
                 android:inputType="numberDecimal"
                 android:id="@+id/edtInput"
                 android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:weightSum="4">
 
         <TextView
-            style="@style/TextViewDisplay"
+            style="@style/TextDisplay"
             android:id="@+id/txtView"
             android:layout_weight="3"
             android:layout_width="0dp"
@@ -44,13 +44,13 @@
             />
 
         <Button
-            android:layout_gravity="end"
             style="@style/ButtonOperation"
-            android:gravity="center"
             android:id="@+id/btnDelete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="end"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="DEL" />
     </LinearLayout>
 
@@ -62,21 +62,21 @@
         android:weightSum="4">
 
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number7"
             android:id="@+id/btn7"
             android:text="7"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number8"
             android:id="@+id/btn8"
             android:text="8"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number9"
             android:id="@+id/btn9"
             android:text="9"
             android:layout_weight="1"
@@ -100,21 +100,21 @@
         android:weightSum="4">
 
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number4"
             android:id="@+id/btn4"
             android:text="4"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number5"
             android:id="@+id/btn5"
             android:text="5"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number6"
             android:id="@+id/btn6"
             android:text="6"
             android:layout_weight="1"
@@ -138,21 +138,21 @@
         android:weightSum="4">
 
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number1"
             android:id="@+id/btn1"
             android:text="1"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number2"
             android:id="@+id/btn2"
             android:text="2"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number3"
             android:id="@+id/btn3"
             android:text="3"
             android:layout_weight="1"
@@ -183,14 +183,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonNumPad.Number0"
             android:id="@+id/btn0"
-            android:text="0"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <Button
-            style="@style/ButtonNumPad"
+            style="@style/ButtonOperation"
             android:layout_weight="1"
             android:id="@+id/btnEnter"
             android:text="="

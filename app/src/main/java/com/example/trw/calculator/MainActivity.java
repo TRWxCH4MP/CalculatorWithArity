@@ -177,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (result != null) {
             edtText.setText(result);
-        } else {
-            onNumberValueChanged(operator);
         }
     }
 

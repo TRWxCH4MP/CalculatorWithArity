@@ -63,6 +63,12 @@ public class NumberCalculateHelperTest {
         Assert.assertEquals(null, checkNumberInsert);
     }
 
+    @Test
+    public void checkNumberInsert_incorrectWithDecimal() {
+        String checkNumberInsert = NumberCalculateHelper.checkNumberInsert(".",".");
+        Assert.assertEquals(null, checkNumberInsert);
+    }
+
 
     @Test
     public void deleteText_correctWithNumber() {
@@ -329,7 +335,7 @@ public class NumberCalculateHelperTest {
     @Test
     public void checkInsertDot_correctStartWithNumber() {
         String checkInsertDot = NumberCalculateHelper.checkInsertDot("10", ".");
-        Assert.assertEquals(".", checkInsertDot);
+        Assert.assertEquals("10.", checkInsertDot);
     }
 
     @Test
@@ -338,5 +344,10 @@ public class NumberCalculateHelperTest {
         Assert.assertEquals(null, checkInsertDot);
     }
 
+    @Test
+    public void checkInsertDot_incorrectWithDot() {
+        String checkInsertDot = NumberCalculateHelper.checkInsertDot(".", ".");
+        Assert.assertEquals(null, checkInsertDot);
+    }
 
 }

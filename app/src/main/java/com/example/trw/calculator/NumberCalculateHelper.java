@@ -31,6 +31,7 @@ public class NumberCalculateHelper {
 
     public static String REGEX_NUMBER = "[A-F0-9.,]";
     public static String REGEX_NOT_NUMBER = "[^A-F0-9.,]";
+    public static String REGEX_NUMBER_ONLY = "[0-9]";
 
     public static Base mBase = Base.DECIMAL;
 
@@ -249,7 +250,6 @@ public class NumberCalculateHelper {
 
         ArrayList<String> listValue = new ArrayList<>(Arrays.asList(value.split("")));
         int index = listValue.size() - 1;
-
         if (value.isEmpty()) {
             return value + "0" + operator;
         } else if (listValue.get(index).equals(PLUS) ||
@@ -257,8 +257,10 @@ public class NumberCalculateHelper {
                 listValue.get(index).equals(MULTIPLY) ||
                 listValue.get(index).equals(DIVIDE)) {
             return value + "0" + operator;
+        } else if (listValue.get(index).matches(REGEX_NUMBER_ONLY)) {
+            return value + operator;
         }
-        return operator;
+        return null;
     }
 
 }

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ButtonNumPad" parent="Widget.AppCompat.Button">
-        <item name="android:textSize">34sp</item>
-    </style>
 
     <style name="ButtonOperation" parent="Widget.AppCompat.Button">
         <item name="android:textSize">34sp</item>
     </style>
 
-    <style name="TextViewDisplay">
+    <style name="TextDisplay">
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center_vertical|right</item>
         <item name="android:maxLines">1</item>
@@ -18,9 +15,51 @@
         <item name="android:alpha">.54</item>
     </style>
 
-    <style name="ScrollViewDisplay">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
+    <style name="ButtonNumPad" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">34sp</item>
     </style>
+
+    <style name="ButtonNumPad.Number0">
+        <item name="android:text">0</item>
+    </style>
+
+    <style name="ButtonNumPad.Number1">
+        <item name="android:text">1</item>
+    </style>
+
+    <style name="ButtonNumPad.Number2">
+        <item name="android:text">2</item>
+    </style>
+
+    <style name="ButtonNumPad.Number3">
+        <item name="android:text">3</item>
+    </style>
+
+    <style name="ButtonNumPad.Number4">
+        <item name="android:text">4</item>
+    </style>
+
+    <style name="ButtonNumPad.Number5">
+        <item name="android:text">5</item>
+    </style>
+
+    <style name="ButtonNumPad.Number6">
+        <item name="android:text">6</item>
+    </style>
+
+    <style name="ButtonNumPad.Number7">
+        <item name="android:text">7</item>
+    </style>
+
+    <style name="ButtonNumPad.Number8">
+        <item name="android:text">8</item>
+    </style>
+
+    <style name="ButtonNumPad.Number9">
+        <item name="android:text">9</item>
+    </style>
+
+
+
 
 </resources>

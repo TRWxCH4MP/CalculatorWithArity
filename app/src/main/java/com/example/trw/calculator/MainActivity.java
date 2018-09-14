@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (result != null) {
             txtView.setText(result);
         } else {
-            Toast.makeText(this, R.string.CannotCalculate, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, R.string.CannotCalculate, Toast.LENGTH_SHORT).show();
         }
     }
 
